@@ -2,6 +2,7 @@ package cn.messycode.tree.locust.provider;
 
 import cn.messycode.tree.locust.Constants;
 import cn.messycode.tree.locust.LocustProperties;
+import cn.messycode.tree.locust.api.LocustService;
 import cn.messycode.tree.locust.consumer.LocustConsumerAutoConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanClassLoaderAware;
@@ -15,6 +16,9 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 
+import javax.annotation.Resource;
+import java.util.Set;
+
 @Configuration
 @ConditionalOnProperty(name = Constants.ENABLED, matchIfMissing = true)
 @EnableConfigurationProperties(LocustProperties.class)
@@ -24,6 +28,9 @@ public class LocustProviderAnnotationRegistrar implements ImportBeanDefinitionRe
     private ClassLoader classLoader;
 
     private Environment environment;
+
+    @Resource
+    private LocustService locustServiceImpl;
 
     @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
@@ -38,6 +45,12 @@ public class LocustProviderAnnotationRegistrar implements ImportBeanDefinitionRe
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata, BeanDefinitionRegistry beanDefinitionRegistry) {
         log.info("[Locust] Provider Registrar START");
+        String n1 = annotationMetadata.getClassName();
+        log.info("n1:[{}]", n1);
 
+        Set<String> types = annotationMetadata.getAnnotationTypes();
+        for(String name : types){
+            log.info("Name:[{}]", name);
+        }
     }
 }

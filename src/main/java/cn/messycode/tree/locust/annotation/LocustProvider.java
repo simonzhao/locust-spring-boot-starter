@@ -2,6 +2,7 @@ package cn.messycode.tree.locust.annotation;
 
 import cn.messycode.tree.locust.Constants;
 import cn.messycode.tree.locust.provider.LocustProviderAnnotationRegistrar;
+import cn.messycode.tree.locust.util.SpringContextUtil;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import java.lang.annotation.Target;
  * 服务声明注解
  */
 @Component
-@Import(LocustProviderAnnotationRegistrar.class)
+@Import({LocustProviderAnnotationRegistrar.class, SpringContextUtil.class})
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
 public @interface LocustProvider {

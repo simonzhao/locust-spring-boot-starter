@@ -1,6 +1,7 @@
 package cn.messycode.tree.locust.service;
 
 import cn.messycode.tree.locust.api.message.LocustMessage;
+import cn.messycode.tree.locust.provider.LocustProviderBeanRegistrar;
 import cn.messycode.tree.locust.util.SpringContextUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -23,10 +24,12 @@ public class LocustProviderHandler extends ChannelInboundHandlerAdapter {
             log.info("sessionNo:[{}] serviceName:[{}] methodName:[{}]"
                     , requestMsg.getSessionNo(), requestMsg.getServiceName(), requestMsg.getMethodName());
 
-            Object object = SpringContextUtil.getBean("lilyServiceImpl");
+            String beanName = LocustProviderBeanRegistrar.getBeanName(requestMsg.getServiceName());
+
+            Object object = SpringContextUtil.getBean(beanName);
             log.info("Bean:[{}]", object.getClass().getName());
 
-            Method method = ReflectionUtils.findMethod(object.getClass(), "getId");
+            Method method = ReflectionUtils.findMethod(object.getClass(), requestMsg.getMethodName());
             log.info("method:[{}]", method.getName());
 
             Object o = ReflectionUtils.invokeMethod(method, object);
